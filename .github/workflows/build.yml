@@ -133,9 +133,9 @@ jobs:
           SUSFS_BRANCH="gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}"
           echo "Using branch for AnyKernel3: $ANYKERNEL_BRANCH"
           echo "Using branch for SUSFS: $SUSFS_BRANCH"
-          git clone https://github.com/Tea-1108/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
+          git clone https://github.com/WildPlusKernel/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
-          git clone https://github.com/Tea-1108/kernel_patches.git
+          git clone https://github.com/WildPlusKernel/kernel_patches.git
 
       - name: Check Disk Space Before Sync
         run: |
@@ -200,7 +200,7 @@ jobs:
               ;;
             "NEXT")
               echo "Adding KernelSU Next..."
-              curl -LSs "https://raw.githubusercontent.com/Tea-1108/KernelSU-Next/next/kernel/setup.sh" | bash ${{ env.BRANCH }}
+              curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash ${{ env.BRANCH }}
               ;;
             "MKSU")
               echo "Adding KernelSU MKSU..."
@@ -386,14 +386,14 @@ jobs:
           # modify UTS_VERSION
           perl -pi -e 's{UTS_VERSION="\$\(echo \$UTS_VERSION \$CONFIG_FLAGS \$TIMESTAMP \| cut -b -\$UTS_LEN\)"}{UTS_VERSION="#1 SMP PREEMPT Sat Apr 20 04:20:00 UTC 2024"}' ./common/scripts/mkcompile_h
           
-          sed -i '$s|echo "\$res"|echo "\$res-Cindy--Tea"|' ./common/scripts/setlocalversion
+          sed -i '$s|echo "\$res"|echo "\$res-Wild"|' ./common/scripts/setlocalversion
           if [ -f "build/build.sh" ]; then
             sed -i 's/-dirty//' ./common/scripts/setlocalversion
           else
             sed -i '/^[[:space:]]*"protected_exports_list"[[:space:]]*:[[:space:]]*"android\/abi_gki_protected_exports_aarch64",$/d' ./common/BUILD.bazel
             rm -rf ./common/android/abi_gki_protected_exports_*
             sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
-            sed -E -i '/^CONFIG_LOCALVERSION=/ s/(.*)"$/\1-Cindy--Tea"/' ./common/arch/arm64/configs/gki_defconfig
+            sed -E -i '/^CONFIG_LOCALVERSION=/ s/(.*)"$/\1-Wild"/' ./common/arch/arm64/configs/gki_defconfig
           fi
 
       - name: Build
